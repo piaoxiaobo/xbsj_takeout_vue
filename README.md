@@ -301,3 +301,302 @@ src
 	|-- App.vue---------------应用根组件vue
 	|-- main.js---------------应用入口js
 ```
+
+#### 2.7.3. 各个vue组件的基本代码
+
+##### 1)pages/Msite/Msite.vue
+```
+<template>
+  <div>Msite vue template</div>
+</template>
+
+<script>
+  export default {}
+</script>
+
+<style lang="stylus" rel="stylesheet/stylus">
+
+</style>
+```
+##### 2)pages/Search/Search.vue
+```
+<template>
+  <div>Search vue template</div>
+</template>
+
+<script>
+  export default {}
+</script>
+
+<style lang="stylus" rel="stylesheet/stylus">
+
+</style>
+```
+##### 3)pages/Order/Order.vue
+```
+<template>
+  <div>order vue template</div>
+</template>
+
+<script>
+  export default {}
+</script>
+
+<style lang="stylus" rel="stylesheet/stylus">
+
+</style>
+```
+##### 4)pages/Profile/Profile.vue
+```
+<template>
+  <div>profile vue template</div>
+</template>
+
+<script>
+  export default {}
+</script>
+
+<style lang="stylus" rel="stylesheet/stylus">
+
+</style>
+```
+##### 5)App.vue
+```
+<template>
+  <div>App vue template</div>
+</template>
+
+<script>
+  export default {}
+</script>
+
+<style lang="stylus" rel="stylesheet/stylus">
+
+</style>
+```
+##### 6)main.js
+```
+import Vue from 'vue'
+import App from './App'
+
+/* eslint-disable no-new */
+new Vue({
+  el: '#app',
+  render: h => h(App)
+})
+```
+### 2.8 引入vue-router
+
+#### 2.8.1 下载vue-router
+```
+npm install vue-router --save
+```
+#### 2.8.2 编码
+##### 1)router/index.js
+```
+/*
+路由器模块
+ */
+import Vue from 'vue'
+import VueRouter from 'vue-router'
+
+import Msite from '../pages/Msite/Msite.vue'
+import Search from '../pages/Search/Search.vue'
+import Order from '../pages/Order/Order.vue'
+import Profile from '../pages/Profile/Profile.vue'
+
+Vue.use(VueRouter)
+
+export default new VueRouter({
+  routes: [
+    {
+      path: '/',
+      redirect: '/msite'
+    },
+    {
+      path: '/msite',
+      component: Msite,
+    },
+    {
+      path: '/search',
+      component: Search,
+    },
+    {
+      path: '/order',
+      component: Order,
+    },
+    {
+      path: '/profile',
+      component: Profile,
+    }
+  ]
+})
+```
+##### 2)main.js
+```
+import Vue from 'vue'
+import app from './app'
+import router from './router'
+
+new Vue({
+  el: '#app',
+  render: h => h(app),
+router,
+})
+
+3)components/FooterGuide/FooterGuide.vue
+<template>
+  <div>
+    FooterGuide
+  </div>
+</template>
+
+<script>
+  export default {}
+</script>
+
+<style>
+
+</style>
+```
+##### 4)App.vue
+```
+<template>
+  <div id="app">
+    <router-view></router-view>
+    <FooterGuide></FooterGuide>
+  </div>
+</template>
+
+<script>
+  import FooterGuide from './components/FooterGuide/FooterGuide.vue'
+
+  export default {
+    components: {
+      FooterGuide
+    }
+  }
+</script>
+
+<style lang="stylus" rel="stylesheet/stylus">
+  #app
+    width 100%
+    height 100%
+    position relative
+</style>
+```
+##### 5)index.html
+```
+<body>
+  <div id="app"></div>
+  <!-- built files will be auto injected -->
+</body>
+```
+#### 2.8.3 引入reset样式
+##### 1)static/css/reset.css
+```
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header,
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video, input {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font-weight: normal;
+  vertical-align: baseline;
+}
+
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure,
+footer, header, menu, nav, section {
+  display: block;
+}
+
+body {
+  line-height: 1;
+}
+
+blockquote, q {
+  quotes: none;
+}
+
+blockquote:before, blockquote:after,
+q:before, q:after {
+  content: none;
+}
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+/* custom */
+a {
+  color: #7e8c8d;
+  text-decoration: none;
+  -webkit-backface-visibility: hidden;
+}
+
+li {
+  list-style: none;
+}
+
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+::-webkit-scrollbar-track-piece {
+  background-color: rgba(0, 0, 0, 0.2);
+  -webkit-border-radius: 6px;
+}
+
+::-webkit-scrollbar-thumb:vertical {
+  height: 5px;
+  background-color: rgba(125, 125, 125, 0.7);
+  -webkit-border-radius: 6px;
+}
+
+::-webkit-scrollbar-thumb:horizontal {
+  width: 5px;
+  background-color: rgba(125, 125, 125, 0.7);
+  -webkit-border-radius: 6px;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  background: #f5f5f5;
+}
+
+body {
+  -webkit-text-size-adjust: none;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+
+/*显示省略号*/
+.ellipsis{
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+```
+##### 2)index.html中引入
+```
+<link rel="stylesheet" href="/static/css/reset.css">
+```
+#### 2.8.4 添加viewport
+##### 1)index.html
+```
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no">
+```

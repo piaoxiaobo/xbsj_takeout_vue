@@ -174,7 +174,7 @@ npm install stylus stylus-loader --save-dev
 
 #### 2.5.6 common/stylus/mixins.styl
 ```
-$green = #02a774;
+$green = #8bc34a;
 $yellow = #F5A100;
 $bc = #e4e4e4;
 
@@ -600,3 +600,1261 @@ body {
 ```
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no">
 ```
+
+### 2.9 创建FooterGuide组件
+####2.9.1 说明
+![](https://i.imgur.com/S6z4hHe.png)
+```
+1)通过编程式导航实现路由的切换显示($router)
+2)通过动态class和$route.path来实现tab样式切换
+3)通过阿里图标库, 显示导航图标
+```
+#### 2.9.2 编码
+```
+<template>
+    <div>
+      <footer class="footer_guide border-1px">
+        <a href="javascript:;" class="guide_item "
+           :class="{on:'/msite' === $route.path}" @click="goto('/msite')">
+      <span class="item_icon">
+        <i class="iconfont icon-waimai"></i>
+      </span>
+          <span>外卖</span>
+        </a>
+        <a href="javascript:;" class="guide_item"
+           :class="{on:'/search' === $route.path}" @click="goto('/search')">
+      <span class="item_icon">
+        <i class="iconfont icon-search"></i>
+      </span>
+          <span>搜索</span>
+        </a>
+        <a href="javascript:;" class="guide_item"
+           :class="{on:'/order' === $route.path}" @click="goto('/order')">
+      <span class="item_icon">
+        <i class="iconfont icon-dingdan"></i>
+      </span>
+          <span>订单</span>
+        </a>
+        <a href="javascript:;" class="guide_item"
+           :class="{on:'/profile' === $route.path}" @click="goto('/profile')">
+      <span class="item_icon">
+        <i class="iconfont icon-geren"></i>
+      </span>
+          <span>我的</span>
+        </a>
+      </footer>
+    </div>
+</template>
+
+<script>
+    export default {
+      methods:{
+        goto(path){
+          this.$router.replace(path)
+        }
+      }
+    }
+</script>
+
+<style lang="stylus" rel="stylesheet/stylus">
+  @import "../../common/stylus/mixins.styl"
+  .footer_guide
+    top-border-1px(#e4e4e4)
+    position fixed
+    z-index 100
+    left 0
+    right 0
+    bottom 0
+    background-color #fff
+    width 100%
+    height 50px
+    display flex
+    .guide_item
+      display flex
+      flex 1
+      text-align center
+      flex-direction column
+      align-items center
+      margin 5px
+      color #999999
+      &.on
+        color #8bc34a
+      span
+        font-size 12px
+        margin-top 2px
+        margin-bottom 2px
+        .iconfont
+          font-size 22px
+</style>
+```
+### 2.10 各导航路由组件(静态)
+
+#### 2.10.1 HeaderTop 组件
+```
+<template>
+  <header class="header">
+    <slot name="search"></slot>
+    <span class="header_title">
+      <span class="header_title_text ellipsis">{{title}}</span>
+    </span>
+    <slot name="login"></slot>
+  </header>
+</template>
+
+<script>
+    export default {
+      props:{
+        title:String
+      }
+    }
+</script>
+
+<style lang="stylus" rel="stylesheet/stylus">
+  .header
+    background-color #8bc34a
+    position fixed
+    z-index 100
+    left 0
+    top 0
+    width 100%
+    height 45px
+    .header_search
+      position absolute
+      left 15px
+      top 50%
+      transform translateY(-50%)
+      width 10%
+      height 50%
+      .icon-sousuo
+        font-size 25px
+        color #fff
+    .header_title
+      position absolute
+      top 50%
+      left 50%
+      transform translate(-50%, -50%)
+      width 50%
+      color #fff
+      text-align center
+      .header_title_text
+        font-size 20px
+        color #fff
+        display block
+    .header_login
+      font-size 14px
+      color #fff
+      position absolute
+      right 15px
+      top 50%
+      transform translateY(-50%)
+      .header_login_text
+        color #fff
+</style>
+
+```
+#### 2.10.2 ShopList 组件
+```
+<template>
+  <div class="shop_container">
+    <ul class="shop_list">
+      <li class="shop_li border-1px">
+        <a>
+          <div class="shop_left">
+            <img class="shop_img" src="./images/shop/1.jpg">
+          </div>
+          <div class="shop_right">
+            <section class="shop_detail_header">
+              <h4 class="shop_title ellipsis" >锄禾日当午，汗滴禾下土</h4>
+              <ul class="shop_detail_ul">
+                <li class="supports">保</li>
+                <li class="supports">准</li>
+                <li class="supports">票</li>
+              </ul>
+            </section>
+            <section class="shop_rating_order">
+              <section class="shop_rating_order_left">
+                <div class="star star-24">
+                  <span class="star-item on"></span>
+                  <span class="star-item on"></span>
+                  <span class="star-item on"></span>
+                  <span class="star-item half"></span>
+                  <span class="star-item off"></span>
+                </div>
+                <div class="rating_section">
+                  3.6
+                </div>
+                <div class="order_section">
+                  月售106单
+                </div>
+              </section>
+              <section class="shop_rating_order_right">
+                <span class="delivery_style delivery_right">硅谷专送</span>
+              </section>
+            </section>
+            <section class="shop_distance">
+              <p class="shop_delivery_msg">
+                <span>¥20起送</span>
+                <span class="segmentation">/</span>
+                <span>配送费约¥5</span>
+              </p>
+            </section>
+          </div>
+        </a>
+      </li>
+      <li class="shop_li border-1px">
+        <a>
+          <div class="shop_left">
+            <img class="shop_img" src="./images/shop/2.jpg">
+          </div>
+          <div class="shop_right">
+            <section class="shop_detail_header">
+              <h4 class="shop_title ellipsis" >锄禾日当午，汗滴禾下土</h4>
+              <ul class="shop_detail_ul">
+                <li class="supports">保</li>
+                <li class="supports">准</li>
+                <li class="supports">票</li>
+              </ul>
+            </section>
+            <section class="shop_rating_order">
+              <section class="shop_rating_order_left">
+                <div class="star star-24">
+                  <span class="star-item on"></span>
+                  <span class="star-item on"></span>
+                  <span class="star-item on"></span>
+                  <span class="star-item on"></span>
+                  <span class="star-item off"></span>
+                </div>
+                <div class="rating_section">
+                  4.1
+                </div>
+                <div class="order_section">
+                  月售106单
+                </div>
+              </section>
+              <section class="shop_rating_order_right">
+                <span class="delivery_style delivery_right">硅谷专送</span>
+              </section>
+            </section>
+            <section class="shop_distance">
+              <p class="shop_delivery_msg">
+                <span>¥20起送</span>
+                <span class="segmentation">/</span>
+                <span>配送费约¥5</span>
+              </p>
+            </section>
+          </div>
+        </a>
+      </li>
+      <li class="shop_li border-1px">
+        <a>
+          <div class="shop_left">
+            <img class="shop_img" src="./images/shop/3.jpg">
+          </div>
+          <div class="shop_right">
+            <section class="shop_detail_header">
+              <h4 class="shop_title ellipsis" >锄禾日当午，汗滴禾下土</h4>
+              <ul class="shop_detail_ul">
+                <li class="supports">保</li>
+                <li class="supports">准</li>
+                <li class="supports">票</li>
+              </ul>
+            </section>
+            <section class="shop_rating_order">
+              <section class="shop_rating_order_left">
+                <div class="star star-24">
+                  <span class="star-item on"></span>
+                  <span class="star-item on"></span>
+                  <span class="star-item on"></span>
+                  <span class="star-item off"></span>
+                  <span class="star-item off"></span>
+                </div>
+                <div class="rating_section">
+                  3.2
+                </div>
+                <div class="order_section">
+                  月售106单
+                </div>
+              </section>
+              <section class="shop_rating_order_right">
+                <span class="delivery_style delivery_right">硅谷专送</span>
+              </section>
+            </section>
+            <section class="shop_distance">
+              <p class="shop_delivery_msg">
+                <span>¥20起送</span>
+                <span class="segmentation">/</span>
+                <span>配送费约¥5</span>
+              </p>
+            </section>
+          </div>
+        </a>
+      </li>
+      <li class="shop_li border-1px">
+        <a>
+          <div class="shop_left">
+            <img class="shop_img" src="./images/shop/4.jpg">
+          </div>
+          <div class="shop_right">
+            <section class="shop_detail_header">
+              <h4 class="shop_title ellipsis" >锄禾日当午，汗滴禾下土</h4>
+              <ul class="shop_detail_ul">
+                <li class="supports">保</li>
+                <li class="supports">准</li>
+                <li class="supports">票</li>
+              </ul>
+            </section>
+            <section class="shop_rating_order">
+              <section class="shop_rating_order_left">
+                <div class="star star-24">
+                  <span class="star-item on"></span>
+                  <span class="star-item on"></span>
+                  <span class="star-item on"></span>
+                  <span class="star-item half"></span>
+                  <span class="star-item off"></span>
+                </div>
+                <div class="rating_section">
+                  3.6
+                </div>
+                <div class="order_section">
+                  月售106单
+                </div>
+              </section>
+              <section class="shop_rating_order_right">
+                <span class="delivery_style delivery_right">硅谷专送</span>
+              </section>
+            </section>
+            <section class="shop_distance">
+              <p class="shop_delivery_msg">
+                <span>¥20起送</span>
+                <span class="segmentation">/</span>
+                <span>配送费约¥5</span>
+              </p>
+            </section>
+          </div>
+        </a>
+      </li>
+    </ul>
+  </div>
+</template>
+
+<script>
+    export default {}
+</script>
+
+<style lang="stylus" rel="stylesheet/stylus">
+  @import "../../common/stylus/mixins.styl"
+  .shop_container
+    margin-bottom 50px
+    .shop_list
+      .shop_li
+        bottom-border-1px(#f1f1f1)
+        width 100%
+        > a
+          clearFix()
+          display block
+          box-sizing border-box
+          padding 15px 8px
+          width 100%
+          .shop_left
+            float left
+            box-sizing border-box
+            width 23%
+            height 75px
+            padding-right 10px
+            .shop_img
+              display block
+              width 100%
+              height 100%
+          .shop_right
+            float right
+            width 77%
+            .shop_detail_header
+              clearFix()
+              width 100%
+              .shop_title
+                float left
+                width 200px
+                color #333
+                font-size 16px
+                line-height 16px
+                font-weight 700
+                &::before
+                  content '品牌'
+                  display inline-block
+                  font-size 11px
+                  line-height 11px
+                  color #333
+                  background-color #ffd930
+                  padding 2px 2px
+                  border-radius 2px
+                  margin-right 5px
+              .shop_detail_ul
+                float right
+                margin-top 3px
+                .supports
+                  float left
+                  font-size 10px
+                  color #999
+                  border 1px solid #f1f1f1
+                  padding 0 2px
+                  border-radius 2px
+            .shop_rating_order
+              clearFix()
+              width 100%
+              margin-top 18px
+              margin-bottom 8px
+              .shop_rating_order_left
+                float left
+                color #ff9a0d
+                .star //2x图 3x图
+                  float left
+                  font-size 0
+                  .star-item
+                    display inline-block
+                    background-repeat no-repeat
+                  &.star-48
+                    .star-item
+                      width 20px
+                      height 20px
+                      margin-right 22px
+                      background-size 20px 20px
+                      &:last-child
+                        margin-right: 0
+                      &.on
+                        bg-image('./images/stars/star48_on')
+                      &.half
+                        bg-image('./images/stars/star48_half')
+                      &.off
+                        bg-image('./images/stars/star48_off')
+                  &.star-36
+                    .star-item
+                      width 15px
+                      height 15px
+                      margin-right 6px
+                      background-size 15px 15px
+                      &:last-child
+                        margin-right 0
+                      &.on
+                        bg-image('./images/stars/star36_on')
+                      &.half
+                        bg-image('./images/stars/star36_half')
+                      &.off
+                        bg-image('./images/stars/star36_off')
+                  &.star-24
+                    .star-item
+                      width 10px
+                      height 10px
+                      margin-right 3px
+                      background-size 10px 10px
+                      &:last-child
+                        margin-right 0
+                      &.on
+                        bg-image('./images/stars/star24_on')
+                      &.half
+                        bg-image('./images/stars/star24_half')
+                      &.off
+                        bg-image('./images/stars/star24_off')
+                .rating_section
+                  float left
+                  font-size 10px
+                  color #ff6000
+                  margin-left 4px
+                .order_section
+                  float left
+                  font-size 10px
+                  color #666
+                  transform scale(.8)
+              .shop_rating_order_right
+                float right
+                font-size 0
+                .delivery_style
+                  transform-origin 35px 0
+                  transform scale(.7)
+                  display inline-block
+                  font-size 12px
+                  padding 1px
+                  border-radius 2px
+                .delivery_left
+                  color #fff
+                  margin-right -10px
+                  background-color #02a774
+                  border 1px solid #02a774
+                .delivery_right
+                  color #02a774
+                  border 1px solid #02a774
+            .shop_distance
+              clearFix()
+              width 100%
+              font-size 12px
+              .shop_delivery_msg
+                float left
+                transform-origin 0
+                transform scale(.9)
+                color #666
+              .segmentation
+                color #ccc
+</style>
+
+```
+
+
+#### 2.10.3 Msite组件
+```
+<template>
+  <div class="msite">
+    <!--首页头部-->
+    <HeaderTop title="历下区解放东路金泉大厦" >
+      <router-link class="header_search" to="/search" slot="search">
+        <i class="iconfont icon-sousuo"></i>
+      </router-link>
+      <router-link class="header_login" to="/login" slot="login">
+        <span class="header_login_text">登录 | 注册</span>
+      </router-link>
+    </HeaderTop>
+    <!--首页导航-->
+    <nav class="msite_nav border-1px">
+      <div class="swiper-container">
+        <div class="swiper-wrapper">
+          <div class="swiper-slide">
+            <a href="javascript:" class="link_to_food">
+              <div class="food_container">
+                <img src="./images/nav/1.jpg">
+              </div>
+              <span>甜品饮品</span>
+            </a>
+            <a href="javascript:" class="link_to_food">
+              <div class="food_container">
+                <img src="./images/nav/2.jpg">
+              </div>
+              <span>商超便利</span>
+            </a>
+            <a href="javascript:" class="link_to_food">
+              <div class="food_container">
+                <img src="./images/nav/3.jpg">
+              </div>
+              <span>美食</span>
+            </a>
+            <a href="javascript:" class="link_to_food">
+              <div class="food_container">
+                <img src="./images/nav/4.jpg">
+              </div>
+              <span>简餐</span>
+            </a>
+            <a href="javascript:" class="link_to_food">
+              <div class="food_container">
+                <img src="./images/nav/5.jpg">
+              </div>
+              <span>新店特惠</span>
+            </a>
+            <a href="javascript:" class="link_to_food">
+              <div class="food_container">
+                <img src="./images/nav/6.jpg">
+              </div>
+              <span>准时达</span>
+            </a>
+            <a href="javascript:" class="link_to_food">
+              <div class="food_container">
+                <img src="./images/nav/7.jpg">
+              </div>
+              <span>预订早餐</span>
+            </a>
+            <a href="javascript:" class="link_to_food">
+              <div class="food_container">
+                <img src="./images/nav/8.jpg">
+              </div>
+              <span>土豪推荐</span>
+            </a>
+          </div>
+          <div class="swiper-slide">
+            <a href="javascript:" class="link_to_food">
+              <div class="food_container">
+                <img src="./images/nav/9.jpg">
+              </div>
+              <span>甜品饮品</span>
+            </a>
+            <a href="javascript:" class="link_to_food">
+              <div class="food_container">
+                <img src="./images/nav/10.jpg">
+              </div>
+              <span>商超便利</span>
+            </a>
+            <a href="javascript:" class="link_to_food">
+              <div class="food_container">
+                <img src="./images/nav/11.jpg">
+              </div>
+              <span>美食</span>
+            </a>
+            <a href="javascript:" class="link_to_food">
+              <div class="food_container">
+                <img src="./images/nav/12.jpg">
+              </div>
+              <span>简餐</span>
+            </a>
+            <a href="javascript:" class="link_to_food">
+              <div class="food_container">
+                <img src="./images/nav/13.jpg">
+              </div>
+              <span>新店特惠</span>
+            </a>
+            <a href="javascript:" class="link_to_food">
+              <div class="food_container">
+                <img src="./images/nav/14.jpg">
+              </div>
+              <span>准时达</span>
+            </a>
+            <a href="javascript:" class="link_to_food">
+              <div class="food_container">
+                <img src="./images/nav/1.jpg">
+              </div>
+              <span>预订早餐</span>
+            </a>
+            <a href="javascript:" class="link_to_food">
+              <div class="food_container">
+                <img src="./images/nav/2.jpg">
+              </div>
+              <span>土豪推荐</span>
+            </a>
+          </div>
+        </div>
+        <!-- Add Pagination -->
+        <div class="swiper-pagination"></div>
+      </div>
+    </nav>
+    <!--首页附近商家-->
+    <div class="msite_shop_list border-1px">
+      <div class="shop_header">
+        <i class="iconfont icon-xuanxiang"></i>
+        <span class="shop_header_title">附近商家</span>
+      </div>
+      <ShopList/>
+    </div>
+  </div>
+</template>
+
+<script>
+  import HeaderTop from '../../components/HeaderTop/HeaderTop.vue'
+  import ShopList from '../../components/ShopList/ShopList.vue'
+  import Swiper from 'swiper';
+  import 'swiper/dist/css/swiper.min.css'
+
+  export default {
+      mounted(){
+        new Swiper('.swiper-container',{
+          pagination: {
+            el: '.swiper-pagination',
+          },
+          loop: true,
+        })
+      },
+      components:{
+        HeaderTop,
+        ShopList
+      }
+    }
+</script>
+
+<style lang="stylus" rel="stylesheet/stylus">
+  @import "../../common/stylus/mixins.styl"
+
+  .msite //首页
+    width 100%
+    .msite_nav
+      bottom-border-1px(#e4e4e4)
+      margin-top 45px
+      height 200px
+      background #fff
+      .swiper-container
+        width 100%
+        height 100%
+        .swiper-wrapper
+          width 100%
+          height 100%
+          .swiper-slide
+            display flex
+            justify-content center
+            align-items flex-start
+            flex-wrap wrap
+            .link_to_food
+              width 25%
+              .food_container
+                display block
+                width 100%
+                text-align center
+                padding-bottom 10px
+                font-size 0
+                img
+                  display inline-block
+                  width 50px
+                  height 50px
+              span
+                display block
+                width 100%
+                text-align center
+                font-size 13px
+                color #666
+        .swiper-pagination
+          > span.swiper-pagination-bullet-active
+            background #02a774
+    .msite_shop_list
+      top-border-1px(#e4e4e4)
+      margin-top 10px
+      background #fff
+      .shop_header
+        padding 10px 10px 0
+        .shop_icon
+          margin-left 5px
+          color #999
+        .shop_header_title
+          color #999
+          font-size 14px
+          line-height 20px
+</style>
+```
+#### 2.10.4 Search组件
+```
+<template>
+  <div class="search">
+    <HeaderTop title="搜索" />
+    <form class="search_form" action="#">
+      <input type="search" name="search" placeholder="请输入商家或美食名称" class="search_input">
+      <input type="submit" name="submit" class="search_submit">
+    </form>
+  </div>
+</template>
+
+<script>
+  import HeaderTop from '../../components/HeaderTop/HeaderTop.vue'
+
+  export default {
+    components:{
+      HeaderTop,
+    }
+  }
+</script>
+
+<style lang="stylus" rel="stylesheet/stylus">
+  @import '../../common/stylus/mixins.styl'
+
+  .search  //搜索
+    width 100%
+    .search_form
+      clearFix()
+      margin-top 45px
+      background-color #fff
+      padding 12px 8px
+      input
+        height 35px
+        padding 0 4px
+        border-radius 2px
+        font-weight bold
+        outline none
+        &.search_input
+          float left
+          width 79%
+          border 4px solid #f2f2f2
+          font-size 14px
+          color #333
+          background-color #f2f2f2
+        &.search_submit
+          float right
+          width 18%
+          border 4px solid #8bc34a
+          font-size 16px
+          color #fff
+          background-color #8bc34a
+</style>
+
+```
+#### 2.10.5 Orider组件
+```
+<template>
+  <div class="order">
+    <HeaderTop title="订单列表" />
+    <section class="order_no_login">
+      <img src="./images/person.png">
+      <h3>登录后查看外卖订单</h3>
+      <button>立即登陆</button>
+    </section>
+  </div>
+</template>
+
+<script>
+  import HeaderTop from '../../components/HeaderTop/HeaderTop.vue'
+
+  export default {
+    components:{
+      HeaderTop,
+    }
+  }
+</script>
+
+<style lang="stylus" rel="stylesheet/stylus">
+ @import '../../common/stylus/mixins.styl'
+
+ .order  //订单
+   width 100%
+   .order_no_login
+     padding-top 140px
+     width 60%
+     margin 0 auto
+     text-align center
+     >img
+       display block
+       width 100%
+       height 30%
+     >h3
+       padding 10px 0
+       font-size 17px
+       color #6a6a6a
+     >button
+       display inline-block
+       background #8bc34a
+       font-size 14px
+       color #fff
+       border 0
+       outline none
+       border-radius 5px
+       padding 10px 20px
+</style>
+
+```
+#### 2.10.6 Profile组件
+```
+<template>
+  <div class="profile">
+    <HeaderTop title="我的" />
+    <section class="profile-number">
+      <router-link class="profile-link" to="/login">
+        <div class="profile_image">
+          <i class="iconfont icon-person"></i>
+        </div>
+        <div class="user-info">
+          <p class="user-info-top">登录/注册</p>
+          <p>
+                <span class="user-icon">
+                  <i class="iconfont icon-shouji icon-mobile"></i>
+                </span>
+            <span class="icon-mobile-number">暂无绑定手机号</span>
+          </p>
+        </div>
+        <span class="arrow">
+              <i class="iconfont icon-jiantou1"></i>
+            </span>
+      </router-link>
+
+    </section>
+    <section class="profile_info_data border-1px">
+      <ul class="info_data_list">
+        <a href="javascript:" class="info_data_link">
+          <span class="info_data_top"><span>0.00</span>元</span>
+          <span class="info_data_bottom">我的余额</span>
+        </a>
+        <a href="javascript:" class="info_data_link">
+          <span class="info_data_top"><span>0</span>个</span>
+          <span class="info_data_bottom">我的优惠</span>
+        </a>
+        <a href="javascript:" class="info_data_link">
+          <span class="info_data_top"><span>0</span>分</span>
+          <span class="info_data_bottom">我的积分</span>
+        </a>
+      </ul>
+    </section>
+    <section class="profile_my_order border-1px">
+      <!-- 我的订单 -->
+      <a href='javascript:' class="my_order">
+            <span>
+              <i class="iconfont icon-order-s"></i>
+            </span>
+        <div class="my_order_div">
+          <span>我的订单</span>
+          <span class="my_order_icon">
+                <i class="iconfont icon-jiantou1"></i>
+              </span>
+        </div>
+      </a>
+      <!-- 积分商城 -->
+      <a href='javascript:' class="my_order">
+            <span>
+              <i class="iconfont icon-jifen"></i>
+            </span>
+        <div class="my_order_div">
+          <span>积分商城</span>
+          <span class="my_order_icon">
+                <i class="iconfont icon-jiantou1"></i>
+              </span>
+        </div>
+      </a>
+      <!-- 硅谷外卖会员卡 -->
+      <a href="javascript:" class="my_order">
+            <span>
+              <i class="iconfont icon-vip"></i>
+            </span>
+        <div class="my_order_div">
+          <span>硅谷外卖会员卡</span>
+          <span class="my_order_icon">
+                <i class="iconfont icon-jiantou1"></i>
+              </span>
+        </div>
+      </a>
+    </section>
+    <section class="profile_my_order border-1px">
+      <!-- 服务中心 -->
+      <a href="javascript:" class="my_order">
+            <span>
+              <i class="iconfont icon-fuwu"></i>
+            </span>
+        <div class="my_order_div">
+          <span>服务中心</span>
+          <span class="my_order_icon">
+                <i class="iconfont icon-jiantou1"></i>
+              </span>
+        </div>
+      </a>
+    </section>
+  </div>
+</template>
+
+<script>
+  import HeaderTop from '../../components/HeaderTop/HeaderTop.vue'
+
+  export default {
+    components:{
+      HeaderTop,
+    }
+  }
+</script>
+
+<style lang="stylus" rel="stylesheet/stylus">
+  @import '../../common/stylus/mixins.styl'
+
+  .profile //我的
+    width 100%
+    .profile-number
+      margin-top 45.5px
+      .profile-link
+        clearFix()
+        position relative
+        display block
+        background #8bc34a
+        padding 20px 10px
+        .profile_image
+          float left
+          width 60px
+          height 60px
+          border-radius 50%
+          overflow hidden
+          vertical-align top
+          .icon-person
+            background #e4e4e4
+            font-size 62px
+        .user-info
+          float left
+          margin-top 8px
+          margin-left 15px
+          p
+            font-weight: 700
+            font-size 18px
+            color #fff
+            &.user-info-top
+              padding-bottom 8px
+            .user-icon
+              display inline-block
+              margin-left -15px
+              margin-right 5px
+              width 20px
+              height 20px
+              .icon-mobile
+                font-size 30px
+                vertical-align text-top
+            .icon-mobile-number
+              font-size 14px
+              color #fff
+        .arrow
+          width 12px
+          height 12px
+          position absolute
+          right 15px
+          top 40%
+          .icon-jiantou1
+            color #fff
+            font-size 5px
+    .profile_info_data
+      bottom-border-1px(#e4e4e4)
+      width 100%
+      background #fff
+      overflow hidden
+      .info_data_list
+        clearFix()
+        .info_data_link
+          float left
+          width 33%
+          text-align center
+          border-right 1px solid #f1f1f1
+          .info_data_top
+            display block
+            width 100%
+            font-size 14px
+            color #333
+            padding 15px 5px 10px
+            span
+              display inline-block
+              font-size 30px
+              color #f90
+              font-weight 700
+              line-height 30px
+          .info_data_bottom
+            display inline-block
+            font-size 14px
+            color #666
+            font-weight 400
+            padding-bottom 10px
+        .info_data_link:nth-of-type(2)
+          .info_data_top
+            span
+              color #ff5f3e
+        .info_data_link:nth-of-type(3)
+          border 0
+          .info_data_top
+            span
+              color #6ac20b
+    .profile_my_order
+      top-border-1px(#e4e4e4)
+      margin-top 10px
+      background #fff
+      .my_order
+        display flex
+        align-items center
+        padding-left 15px
+        >span
+          display flex
+          align-items center
+          width 20px
+          height 20px
+          >.iconfont
+            margin-left -10px
+            font-size 30px
+          .icon-order-s
+            color #02a774
+          .icon-jifen
+            color #ff5f3e
+          .icon-vip
+            color #f90
+          .icon-fuwu
+            color #02a774
+        .my_order_div
+          width 100%
+          border-bottom 1px solid #f1f1f1
+          padding 18px 10px 18px 0
+          font-size 16px
+          color #333
+          display flex
+          justify-content space-between
+          span
+            display block
+          .my_order_icon
+            width 10px
+            height 10px
+            .icon-jiantou1
+              color #bbb
+              font-size 10px
+</style>
+```
+#### 2.10.7 Login 组件
+```
+<template>
+  <div class="loginContainer">
+    <div class="loginInner">
+      <div class="login_header">
+        <h2 class="login_logo">小泊外卖</h2>
+        <div class="login_header_title">
+          <a href="javascript:;" class="on">短信登录</a>
+          <a href="javascript:;" >密码登录</a>
+        </div>
+      </div>
+      <div class="login_content">
+        <form>
+          <div class="on">
+            <section class="login_message">
+              <input type="tel" maxlength="11" placeholder="手机号">
+              <button disabled="disabled" class="get_verification" >获取验证码</button>
+            </section>
+            <section class="login_verification">
+              <input type="tel" maxlength="8" placeholder="验证码">
+            </section>
+            <section class="login_hint">
+              温馨提示：未注册小泊外卖帐号的手机号，登录时将自动注册，且代表已同意
+              <a href="javascript:;">《用户服务协议》</a>
+            </section>
+          </div>
+          <div>
+            <section>
+              <section class="login_message">
+                <input type="tel" maxlength="11" placeholder="手机/邮箱/用户名">
+              </section>
+              <section class="login_verification">
+                <input type="tel" maxlength="8" placeholder="密码">
+                <div class="switch_button off">
+                  <div class="switch_circle"></div>
+                  <span class="switch_text">...</span>
+                </div>
+              </section>
+              <section class="login_message">
+                <input type="text" maxlength="11" placeholder="验证码">
+                <img class="get_verification" src="./images/captcha.svg" alt="captcha">
+              </section>
+            </section>
+          </div>
+          <button class="login_submit">登录</button>
+        </form>
+        <a href="javascript:;" class="about_us">关于我们</a>
+      </div>
+      <a href="javascript:" class="go_back" @click="$router.back()">
+        <i class="iconfont icon-jiantou2"></i>
+      </a>
+    </div>
+  </div>
+</template>
+
+<script>
+    export default {}
+</script>
+
+<style lang="stylus" rel="stylesheet/stylus">
+  @import "../../common/stylus/mixins.styl"
+  .loginContainer
+    width 100%
+    height 100%
+    background #fff
+    .loginInner
+      padding-top 60px
+      width 80%
+      margin 0 auto
+      .login_header
+        .login_logo
+          font-size 40px
+          font-weight bold
+          color #8bc34a
+          text-align center
+        .login_header_title
+          padding-top 40px
+          text-align center
+          >a
+            color #333
+            font-size 14px
+            padding-bottom 4px
+            &:first-child
+              margin-right 40px
+            &.on
+              color #02a774
+              font-weight 700
+              border-bottom 2px solid #02a774
+      .login_content
+        >form
+          >div
+            display none
+            &.on
+              display block
+            input
+              width 100%
+              height 100%
+              padding-left 10px
+              box-sizing border-box
+              border 1px solid #ddd
+              border-radius 4px
+              outline 0
+              font 400 14px Arial
+              &:focus
+                border 1px solid #02a774
+            .login_message
+              position relative
+              margin-top 16px
+              height 48px
+              font-size 14px
+              background #fff
+              .get_verification
+                position absolute
+                top 50%
+                right 10px
+                transform translateY(-50%)
+                border 0
+                color #ccc
+                font-size 14px
+                background transparent
+            .login_verification
+              position relative
+              margin-top 16px
+              height 48px
+              font-size 14px
+              background #fff
+              .switch_button
+                font-size 12px
+                border 1px solid #ddd
+                border-radius 8px
+                transition background-color .3s,border-color .3s
+                padding 0 6px
+                width 30px
+                height 16px
+                line-height 16px
+                color #fff
+                position absolute
+                top 50%
+                right 10px
+                transform translateY(-50%)
+                &.off
+                  background #fff
+                  .switch_text
+                    float right
+                    color #ddd
+                &.on
+                  background #02a774
+                >.switch_circle
+                  //transform translateX(27px)
+                  position absolute
+                  top -1px
+                  left -1px
+                  width 16px
+                  height 16px
+                  border 1px solid #ddd
+                  border-radius 50%
+                  background #fff
+                  box-shadow 0 2px 4px 0 rgba(0,0,0,.1)
+                  transition transform .3s
+            .login_hint
+              margin-top 12px
+              color #999
+              font-size 14px
+              line-height 20px
+              >a
+                color #02a774
+          .login_submit
+            display block
+            width 100%
+            height 42px
+            margin-top 30px
+            border-radius 4px
+            background #4cd96f
+            color #fff
+            text-align center
+            font-size 16px
+            line-height 42px
+            border 0
+        .about_us
+          display block
+          font-size 12px
+          margin-top 20px
+          text-align center
+          color #999
+      .go_back
+        position absolute
+        top 5px
+        left 5px
+        width 30px
+        height 30px
+        >.iconfont
+          font-size 20px
+          color #999
+</style>
+```
+### 注意：组件所需要的相应图片到仓库中获取
+
+

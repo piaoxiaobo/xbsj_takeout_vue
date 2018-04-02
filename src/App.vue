@@ -9,7 +9,12 @@
 <script>
   import FooterGuide from './components/FooterGuide/FooterGuide.vue'
 
-    export default {
+  import {reqAddress} from './api'
+  export default {
+    async mounted () {
+      const result = await reqAddress('40.10038,116.37867');
+      console.log(result)
+    },
       components:{
         FooterGuide
       }

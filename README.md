@@ -1856,6 +1856,117 @@ body {
 </style>
 ```
 ### 注意：组件所需要的相应图片到仓库中获取
-#### 
+### 2.11 后台应用
+#### 2.11.1 说明
+```
+1)本项目是一个前后台分离的项目: 前台应用与后台应用
+2)后台应用负责处理前台应用提交的请求, 并给前台应用返回json数据
+3)前台应用负责展现数据, 与用户交互, 与后台应用交互
+```
+#### 2.11.2 运行后台应用
+```
+1)确保启动mongodb服务
+2)启动服务器应用(gwaimai_server): npm start
+```
+[MongoDB安装及配置](https://www.itsolotime.com/blog/2018/01/25/mongoDB%20usage/)
+#### 2.11.3. API接口文档
+详细查看“API.md”
+#### 2.11.4. 使用postman工具测试接口
+```
+1)postman是用来测试API接口的chrome插件
+2)postman也是一个活接口文档
+```
+### 2.12 前后台交互ajax
+#### 2.12.1 下载依赖包
+```
+npm install --save axios
+```
+#### 2.12.2 封装ajax请求模块
+##### 1)api/ajax.js
+```
+/**
+ * Created by Bianrongcheng on 2018
+ * 发送ajax请求函数封装模块
+ */
 
+import axios from 'axios'
 
+export default function ajax(url='', data={}, method='GET') {
+
+  return new Promise(function (resolve, reject) {
+    let promise
+    if(method==='GET') {// /login?name=tom&pwd=123
+      // name=tom&pwd=123
+      let dataString = ''
+      Object.keys(data).forEach(key => {
+        const value = data[key];
+        dataString += key + '=' + value + '&'
+      })
+      if(dataString) {
+        dataString = dataString.substring(0, dataString.length-1) // 去掉最后的&
+      }
+      // /login?name=tom&pwd=123
+      url += '?' + dataString
+
+      promise = axios.get(url)
+    } else {
+      promise = axios.post(url, data) // {name:'tom', pwd: '123'}
+    }
+
+    promise.then(response => {
+      resolve(response.data) 
+    }).catch(error => {
+      reject(error)
+    })
+  })
+
+}
+
+```
+##### 2)api/index.js
+```
+/**
+ * Created by Bianrongcheng on 2018
+ * 接口请求函数的模块
+ */
+
+import ajax from './ajax.js';
+
+// [1、根据经纬度获取位置详情](#1根据经纬度获取位置详情)
+export const reqAddress = (geohash) => ajax('/api/position/'+geohash);
+
+// [2、获取食品分类列表](#2获取食品分类列表)
+export const reqFoodList = () =>ajax('/api/index_category');
+
+// [3、根据经纬度获取商铺列表](#3根据经纬度获取商铺列表)
+export const reqShopList = (longitude, latitude) => ajax('/api/shops', {longitude, latitude});
+// latitude=40.10038&longitude=116.36867
+
+// [4、获取一次性验证码](#4获取一次性验证码)<br/>
+export const reqCaptcha = () => ajax('/api/captcha');
+
+// [5、用户名密码登陆](#4用户名密码登陆)
+export const loginPwd = ({name, pwd, captcha}) => ajax('/api/login_pwd', {name, pwd, captcha}, 'POST');
+
+// [6、发送短信验证码](#5发送短信验证码)
+export const sendCode = (phone) => ajax('/api/sendcode', {phone});
+
+// [7、手机号验证码登陆](#6手机号验证码登陆)
+export const loginSms = ({phone, code}) => ajax('/api/login_sms', {phone, code}, 'POST');
+
+// [8、根据会话获取用户信息](#7根据会话获取用户信息)
+export const reqUserInfo = () => ajax('/api/userinfo');
+```
+#### 2.12.3. 配置代理
+##### config/index.js
+```
+proxyTable: {
+  '/api': { // 匹配所有以 '/api'开头的请求路径
+    target: 'http://localhost:3000', // 代理目标的基础路径
+    changeOrigin: true, // 支持跨域
+    pathRewrite: {// 重写路径: 去掉路径中开头的'/api'
+      '^/api': ''
+    }
+  }
+}
+```

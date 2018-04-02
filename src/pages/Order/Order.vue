@@ -39,7 +39,7 @@
        color #6a6a6a
      >button
        display inline-block
-       background #02a774
+       background #8bc34a
        font-size 14px
        color #fff
        border 0

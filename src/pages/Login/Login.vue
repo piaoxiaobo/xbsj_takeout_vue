@@ -2,7 +2,7 @@
   <div class="loginContainer">
     <div class="loginInner">
       <div class="login_header">
-        <h2 class="login_logo">硅谷外卖</h2>
+        <h2 class="login_logo">小泊外卖</h2>
         <div class="login_header_title">
           <a href="javascript:;" class="on">短信登录</a>
           <a href="javascript:;" >密码登录</a>
@@ -19,7 +19,7 @@
               <input type="tel" maxlength="8" placeholder="验证码">
             </section>
             <section class="login_hint">
-              温馨提示：未注册硅谷外卖帐号的手机号，登录时将自动注册，且代表已同意
+              温馨提示：未注册小泊外卖帐号的手机号，登录时将自动注册，且代表已同意
               <a href="javascript:;">《用户服务协议》</a>
             </section>
           </div>
@@ -70,7 +70,7 @@
         .login_logo
           font-size 40px
           font-weight bold
-          color #02a774
+          color #8bc34a
           text-align center
         .login_header_title
           padding-top 40px

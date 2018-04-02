@@ -18,7 +18,7 @@
 
 <style lang="stylus" rel="stylesheet/stylus">
   .header
-    background-color #02a774
+    background-color #8bc34a
     position fixed
     z-index 100
     left 0

@@ -113,7 +113,7 @@
         clearFix()
         position relative
         display block
-        background #02a774
+        background #8bc34a
         padding 20px 10px
         .profile_image
           float left

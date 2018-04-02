@@ -602,7 +602,7 @@ body {
 ```
 
 ### 2.9 创建FooterGuide组件
-####2.9.1 说明
+#### 2.9.1 说明
 ![](https://i.imgur.com/S6z4hHe.png)
 ```
 1)通过编程式导航实现路由的切换显示($router)

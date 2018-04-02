@@ -66,7 +66,7 @@ npm run dev
 #### 2.1.2 vue新老版本的脚手架项目对比
 ![](https://i.imgur.com/5mmxmIV.png)
 
-#### 2.1.3 项目结构分析\
+#### 2.1.3 项目结构分析
 ```
 xb_takeout
 	|-- build : webpack相关的配置文件夹(基本不需要修改)

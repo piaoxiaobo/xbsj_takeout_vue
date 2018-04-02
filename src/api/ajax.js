@@ -13,7 +13,7 @@ export default function ajax(url='', data={}, method='GET') {
       // name=tom&pwd=123
       let dataString = ''
       Object.keys(data).forEach(key => {
-        const value = data[key]
+        const value = data[key];
         dataString += key + '=' + value + '&'
       })
       if(dataString) {

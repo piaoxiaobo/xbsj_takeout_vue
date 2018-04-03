@@ -8,15 +8,14 @@
 
 <script>
   import FooterGuide from './components/FooterGuide/FooterGuide.vue'
-
   import {reqAddress} from './api'
   export default {
-    //测试ajax请求
-    async mounted () {
-      const result = await reqAddress('40.10038,116.37867');
-      console.log(result)
+
+    mounted () {
+      this.$store.dispatch('getAddress')
     },
-      components:{
+
+    components:{
         FooterGuide
       }
     }

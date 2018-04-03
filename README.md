@@ -1973,7 +1973,7 @@ export const loginSms = ({phone, code}) => ajax('/api/login_sms', {phone, code},
 // [8、根据会话获取用户信息](#7根据会话获取用户信息)
 export const reqUserInfo = () => ajax('/api/userinfo');
 ```
-#### 2.12.3. 配置代理
+#### 2.12.3 配置代理
 ##### config/index.js
 ```
 proxyTable: {
@@ -1984,5 +1984,158 @@ proxyTable: {
       '^/api': ''
     }
   }
+}
+```
+### 2.13 使用vuex管理状态
+#### 2.13.1 下载vuex
+```
+npm install --save vuex
+```
+#### 2.13.2 定义 state
+store/state.js
+```
+/**
+ * Created by Bianrongcheng on 2018
+ */
+
+export default{
+  latitude: 40.10038, // 纬度
+  longitude: 116.36867, // 经度
+  address: {}, // 地址信息对象
+  categorys: [], // 分类数组
+  shops: [], //商家数组
+}
+```
+#### 2.13.3 定义mutation-types
+store/mutation-types.js
+```
+/**
+ * Created by Bianrongcheng on 2018
+ */
+export const RECEIVE_ADDRESS = 'receive_address';
+export const RECEIVE_CATEGORYS = 'receive_categorys';
+export const RECEIVE_SHOPS =  'receive_shops';
+```
+#### 2.13.4 定义mutations
+store/mutations.js
+```
+/**
+ * Created by Bianrongcheng on 2018
+ */
+import {
+  RECEIVE_ADDRESS,
+  RECEIVE_CATEGORYS,
+  RECEIVE_SHOPS}
+from './mutation-types'
+
+export default{
+  [RECEIVE_ADDRESS](state,{address}){
+      state.address = address;
+  },
+  [RECEIVE_CATEGORYS](state,{categorys}){
+      state.categorys = categorys;
+  },
+  [RECEIVE_SHOPS](state,{shops}){
+      state.shops = shops;
+  }
+
+}
+```
+#### 2.13.5定义actions
+store/actions.js
+```
+/**
+ * Created by Bianrongcheng on 2018
+ */
+import {
+  RECEIVE_SHOPS,
+  RECEIVE_CATEGORYS,
+  RECEIVE_ADDRESS
+} from './mutation-types'
+
+import {
+  reqAddress,
+  reqFoodList,
+  reqShopList
+} from '../api'
+
+export default{
+  async getAddress ({commit,state}) {
+    const {latitude,longitude} = state;
+    const result = await reqAddress(latitude+','+longitude);
+    if(result.code ===0){
+      const address = result.data;
+      commit(RECEIVE_ADDRESS,{address})
+    }
+  },
+  async getCategorys({commit}){
+    const result = await reqFoodList();
+    if(result.code ===0){
+      const categorys = result.data;
+      commit(RECEIVE_CATEGORYS,{categorys})
+    }
+  },
+  async getShops({commit,}){
+    const {latitude,longitude} = state;
+    const result = await reqShopList(latitude,longitude);
+    if(result.code===0){
+      const shops =result.data;
+      commit(RECEIVE_SHOPS,{shops})
+    }
+  }
+}
+```
+#### 2.13.6. 定义store对象
+store/index.js
+```
+/**
+ * Created by Bianrongcheng on 2018
+ */
+import Vue from 'vue';
+import Vuex from 'vuex';
+import actions from './actions'
+import getters from './getters'
+import state from './state'
+import mutations from './mutations'
+
+Vue.use(Vuex);
+
+
+
+export default new Vuex.Store({
+  actions,
+  mutations,
+  state,
+  getters
+})
+```
+#### 2.13.7 注册store
+main.js
+```
+import store from './store'
+
+new Vue({
+  store
+})
+```
+### 2.14 异步显示数据
+#### 2.14.1 App.vue
+```
+created () {
+  // 异步获取address
+  this.$store.dispatch('getAddress')
+}
+```
+#### 2.14.2 Msite.vue
+```
+ <HeaderTop :title="address.name" >
+```
+```
+import {mapState} from 'vuex'
+export default {
+     
+    computed:{
+      ...mapState(['address'])
+    },
 }
 ```

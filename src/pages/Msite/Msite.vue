@@ -1,7 +1,7 @@
 <template>
   <div class="msite">
     <!--首页头部-->
-    <HeaderTop title="历下区解放东路金泉大厦" >
+    <HeaderTop :title="address.name" >
       <router-link class="header_search" to="/search" slot="search">
         <i class="iconfont icon-sousuo"></i>
       </router-link>
@@ -130,6 +130,7 @@
 </template>
 
 <script>
+  import {mapState} from 'vuex'
   import HeaderTop from '../../components/HeaderTop/HeaderTop.vue'
   import ShopList from '../../components/ShopList/ShopList.vue'
   import Swiper from 'swiper';
@@ -144,6 +145,9 @@
           loop: true,
         })
       },
+    computed:{
+      ...mapState(['address'])
+    },
       components:{
         HeaderTop,
         ShopList

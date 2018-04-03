@@ -59,7 +59,6 @@
 ## 第二章: 应用开发详解
 ### 2.1 开启项目开发
 #### 2.1.1  使用vue-cli(脚手架)搭建项目
-
 1)Vue-cli是vue官方提供的用于搭建基于vue+webpack+es6项目的脚手架工具 <br>
 
 2)在线文档: https://github.com/vuejs/vue-cli <br>
@@ -103,8 +102,6 @@ xb_takeout
 ##### 1)编码测试
 ```
 npm run dev
-```  
-```
 访问: http://localhost:8080
 编码, 自动编译打包(HMR), 查看效果
 ```
@@ -140,8 +137,6 @@ d.可扩展性：改变图标的大小，就像改变字体大小一样容易。
 e.矢量性：图标是矢量的，与像素无关。缩放图标不会影响清晰度。
 f.兼容性：字体图标支持所有现代浏览器（包括糟糕的IE6）。
 g.本地使用：通过添加定制字体到你的本地系统，你可以在各种不同的设计和编辑应用程序中使用它们。
-
-
 ##### 2)iconfont使用(本地没有svg)
 
 方法地址：
@@ -603,7 +598,6 @@ body {
 ```
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no">
 ```
-
 ### 2.9 创建FooterGuide组件
 #### 2.9.1 说明
 ![](https://i.imgur.com/S6z4hHe.png)

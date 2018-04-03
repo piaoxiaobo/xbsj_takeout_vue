@@ -1856,6 +1856,22 @@ body {
 </style>
 ```
 ### 注意：组件所需要的相应图片到仓库中获取
+
+#### 2.10.8 Footer组件优化,使其隐藏显示
+在路由模板中,给各路由添加meta属性
+```
+ {
+      path: '/msite',
+      component: Msite,
+      meta:{
+        showFooter:true
+      }
+    },
+```
+修改App.vue文件
+```
+<FooterGuide v-show="$route.meta.showFooter" />
+```
 ### 2.11 后台应用
 #### 2.11.1 说明
 ```

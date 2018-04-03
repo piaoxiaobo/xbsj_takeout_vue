@@ -2124,6 +2124,7 @@ created () {
 }
 ```
 #### 2.14.2 Msite.vue
+首页导航的显示数据异步加载
 ```
 <template>
   <div class="msite">
@@ -2229,6 +2230,7 @@ created () {
 </script>
 ```
 #### 2.14.3 ShopList.vue
+卖家列表动态数据异步加载
 ```
 <template>
   <div class="shop_container">
@@ -2299,6 +2301,7 @@ created () {
 </script>
 ```
 #### 2.14.4 Star.vue
+买家评价“星星”展示
 ```
 <template>
   <div class="star" :class="`star-${size}`">
@@ -2395,7 +2398,8 @@ created () {
           bg-image('./images/star24_off')
 </style>
 ```
-#### 2.14.5 Star.vue
+#### 2.14.5 Login.vue
+登陆方式切换，输入手机号，密码的交互，输入验证码的动态数据异步加载
 ```
 <template>
   <div class="loginContainer">

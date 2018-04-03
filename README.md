@@ -2231,70 +2231,167 @@ created () {
 #### 2.14.3 ShopList.vue
 ```
 <template>
-  <div class="shop_container">
-    <ul class="shop_list" v-if="shops.length>0">
-      <li class="shop_li border-1px" v-for="(shop,index) in shops" :key="index">
-        <a>
-          <div class="shop_left">
-            <img class="shop_img" :src="imgBaseUrl+shop.image_path">
-          </div>
-          <div class="shop_right">
-            <section class="shop_detail_header">
-              <h4 class="shop_title ellipsis" >{{shop.name}}</h4>
-              <ul class="shop_detail_ul">
-                <li class="supports" v-for="(support,index) in shop.supports">{{support.icon_name}}</li>
-              </ul>
-            </section>
-            <section class="shop_rating_order">
-              <section class="shop_rating_order_left">
-                <div class="star star-24">
-                  <span class="star-item on"></span>
-                  <span class="star-item on"></span>
-                  <span class="star-item on"></span>
-                  <span class="star-item half"></span>
-                  <span class="star-item off"></span>
-                </div>
-                <div class="rating_section">
-                  {{shop.rating}}
-                </div>
-                <div class="order_section">
-                  月售{{shop.recent_order_num}}单
-                </div>
-              </section>
-              <section class="shop_rating_order_right">
-                <span class="delivery_style delivery_right">{{shop.delivery_mode.text}}</span>
-              </section>
-            </section>
-            <section class="shop_distance">
-              <p class="shop_delivery_msg">
-                <span>¥{{shop.float_minimum_order_amount}}起送</span>
-                <span class="segmentation">/</span>
-                <span>{{shop.piecewise_agent_fee.tips}}</span>
-              </p>
-            </section>
-          </div>
-        </a>
-      </li>
-    </ul>
-    <ul v-else>
-      <li v-for="i in 10" :key="i">
-        <img src="./shop_back.svg">
-      </li>
-    </ul>
-  </div>
+  <div class="shop_container">
+    <ul class="shop_list" v-if="shops.length>0">
+      <li class="shop_li border-1px" v-for="(shop,index) in shops" :key="index">
+        <a>
+          <div class="shop_left">
+            <img class="shop_img" :src="imgBaseUrl+shop.image_path">
+          </div>
+          <div class="shop_right">
+            <section class="shop_detail_header">
+              <h4 class="shop_title ellipsis" >{{shop.name}}</h4>
+              <ul class="shop_detail_ul">
+                <li class="supports" v-for="(support,index) in shop.supports">{{support.icon_name}}</li>
+              </ul>
+            </section>
+            <section class="shop_rating_order">
+              <section class="shop_rating_order_left">
+                <Star :score="shop.rating" :size="24"/>
+                <div class="rating_section">
+                  {{shop.rating}}
+                </div>
+                <div class="order_section">
+                  月售{{shop.recent_order_num}}单
+                </div>
+              </section>
+              <section class="shop_rating_order_right">
+                <!--{{shop.delivery_mode.text}}-->
+                <span class="delivery_style delivery_right">小泊专送</span>
+              </section>
+            </section>
+            <section class="shop_distance">
+              <p class="shop_delivery_msg">
+                <span>¥{{shop.float_minimum_order_amount}}起送</span>
+                <span class="segmentation">/</span>
+                <span>{{shop.piecewise_agent_fee.tips}}</span>
+              </p>
+            </section>
+          </div>
+        </a>
+      </li>
+    </ul>
+    <ul v-else>
+      <li v-for="i in 10" :key="i">
+        <img src="./shop_back.svg">
+      </li>
+    </ul>
+  </div>
 </template>
 
 <script>
-  import {mapState} from 'vuex'
-    export default {
-      data(){
-        return{
-          imgBaseUrl: 'http://cangdu.org:8001/img/'
-        }
-      },
-      computed:{
-        ...mapState(['shops'])
-      }
-    }
+  import {mapState} from 'vuex'
+  import Star from '../Start/Star.vue'
+
+    export default {
+      data(){
+        return{
+          imgBaseUrl: 'http://cangdu.org:8001/img/'
+        }
+      },
+      computed:{
+        ...mapState(['shops']),
+      },
+      components:{
+        Star
+      }
+    }
 </script>
+```
+#### 2.14.4 Star.vue
+```
+<template>
+  <div class="star" :class="`star-${size}`">
+    <span class="star-item" v-for="(sc,index) in starClasses" :key="index" :class="sc"></span>
+  </div>
+</template>
+
+<script>
+    const Class_ON = 'on';
+    const Class_HALF = 'half';
+    const Class_OFF = 'off';
+
+    export default {
+      props:{
+        score:Number,
+        size:Number,
+      },
+      computed:{
+        starClasses(){
+          const scs = [];
+          const {score} = this;
+          const scoreInteger = Math.floor(score);
+
+          while(scs.length<scoreInteger){
+           scs.push(Class_ON)
+          }
+          if(score*10-scoreInteger*10>=5) {
+            scs.push(Class_HALF)
+
+          }
+          while(scs.length<5){
+            scs.push(Class_OFF)
+          }
+
+          return scs;
+        }
+
+      }
+    }
+
+
+</script>
+
+<style lang="stylus" rel="stylesheet/stylus">
+  @import '../../common/stylus/mixins.styl'
+
+  .star //2x图 3x图
+    float left
+    font-size 0
+    .star-item
+      display inline-block
+      background-repeat no-repeat
+    &.star-48
+      .star-item
+        width 20px
+        height 20px
+        margin-right 22px
+        background-size 20px 20px
+        &:last-child
+          margin-right: 0
+        &.on
+          bg-image('./images/star48_on')
+        &.half
+          bg-image('./images/star48_half')
+        &.off
+          bg-image('./images/star48_off')
+    &.star-36
+      .star-item
+        width 15px
+        height 15px
+        margin-right 6px
+        background-size 15px 15px
+        &:last-child
+          margin-right 0
+        &.on
+          bg-image('./images/star36_on')
+        &.half
+          bg-image('./images/star36_half')
+        &.off
+          bg-image('./images/star36_off')
+    &.star-24
+      .star-item
+        width 10px
+        height 10px
+        margin-right 3px
+        background-size 10px 10px
+        &:last-child
+          margin-right 0
+        &.on
+          bg-image('./images/star24_on')
+        &.half
+          bg-image('./images/star24_half')
+        &.off
+          bg-image('./images/star24_off')
+</style>
 ```

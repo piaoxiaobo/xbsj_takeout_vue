@@ -2128,14 +2128,176 @@ created () {
 ```
 #### 2.14.2 Msite.vue
 ```
- <HeaderTop :title="address.name" >
-```
-```
-import {mapState} from 'vuex'
-export default {
-     
-    computed:{
-      ...mapState(['address'])
+<template>
+  <div class="msite">
+    <!--首页头部-->
+    <HeaderTop :title="address.name" >
+      <router-link class="header_search" to="/search" slot="search">
+        <i class="iconfont icon-sousuo"></i>
+      </router-link>
+      <router-link class="header_login" to="/login" slot="login">
+        <span class="header_login_text">登录 | 注册</span>
+      </router-link>
+    </HeaderTop>
+    <!--首页导航-->
+    <nav class="msite_nav border-1px">
+      <div class="swiper-container" v-if="categorys.length>0">
+        <div class="swiper-wrapper" >
+          <div class="swiper-slide" v-for="(categorys,index) in categorysArr" :key="index">
+            <a href="javascript:" class="link_to_food" v-for="(c,index) in categorys" :key="index">
+              <div class="food_container">
+                <img :src="imgBaseUrl+c.image_url">
+              </div>
+              <span>{{c.title}}</span>
+            </a>
+          </div>
+        </div>
+        <!-- Add Pagination -->
+        <div class="swiper-pagination"></div>
+      </div>
+      <img src="./msite_back.svg" v-else>
+    </nav>
+    <!--首页附近商家-->
+    <div class="msite_shop_list border-1px">
+      <div class="shop_header">
+        <i class="iconfont icon-xuanxiang"></i>
+        <span class="shop_header_title">附近商家</span>
+      </div>
+      <ShopList />
+    </div>
+  </div>
+</template>
+
+<script>
+  import {mapState} from 'vuex'
+  import HeaderTop from '../../components/HeaderTop/HeaderTop.vue'
+  import ShopList from '../../components/ShopList/ShopList.vue'
+  import Swiper from 'swiper';
+  import 'swiper/dist/css/swiper.min.css'
+
+  export default {
+
+    data(){
+      return{
+        imgBaseUrl: 'https://fuss10.elemecdn.com'
+      }
     },
-}
+    mounted(){
+      this.$store.dispatch('getCategorys');
+      this.$store.dispatch('getShops');
+    },
+    computed:{
+      ...mapState(['address','categorys']),
+
+      categorysArr(){
+
+        const arr = [];
+        const {categorys} = this;
+        let smallArr = [];
+        const max =8;
+
+        categorys.forEach(c =>{
+          if(smallArr.length===0){
+            arr.push(smallArr);
+          }
+
+          smallArr.push(c);
+
+          if(smallArr.length===max){
+            smallArr=[];
+          }
+        });
+
+        return arr;
+      }
+    },
+    components:{
+      HeaderTop,
+      ShopList
+    },
+    watch: {
+      categorys (value) { // categorys发生了变化(从后台获取到了数据)
+        this.$nextTick(() => { // 回调函数在DOM更新之后立即调用
+          new Swiper('.swiper-container', { // 配置对象
+            loop: true, // 是否循环轮播,
+            pagination: { // 指定分页器容器
+              el: '.swiper-pagination',
+            },
+          })
+        })
+      }
+    },
+  }
+
+</script>
+```
+#### 2.14.3 ShopList.vue
+```
+<template>
+  <div class="shop_container">
+    <ul class="shop_list" v-if="shops.length>0">
+      <li class="shop_li border-1px" v-for="(shop,index) in shops" :key="index">
+        <a>
+          <div class="shop_left">
+            <img class="shop_img" :src="imgBaseUrl+shop.image_path">
+          </div>
+          <div class="shop_right">
+            <section class="shop_detail_header">
+              <h4 class="shop_title ellipsis" >{{shop.name}}</h4>
+              <ul class="shop_detail_ul">
+                <li class="supports" v-for="(support,index) in shop.supports">{{support.icon_name}}</li>
+              </ul>
+            </section>
+            <section class="shop_rating_order">
+              <section class="shop_rating_order_left">
+                <div class="star star-24">
+                  <span class="star-item on"></span>
+                  <span class="star-item on"></span>
+                  <span class="star-item on"></span>
+                  <span class="star-item half"></span>
+                  <span class="star-item off"></span>
+                </div>
+                <div class="rating_section">
+                  {{shop.rating}}
+                </div>
+                <div class="order_section">
+                  月售{{shop.recent_order_num}}单
+                </div>
+              </section>
+              <section class="shop_rating_order_right">
+                <span class="delivery_style delivery_right">{{shop.delivery_mode.text}}</span>
+              </section>
+            </section>
+            <section class="shop_distance">
+              <p class="shop_delivery_msg">
+                <span>¥{{shop.float_minimum_order_amount}}起送</span>
+                <span class="segmentation">/</span>
+                <span>{{shop.piecewise_agent_fee.tips}}</span>
+              </p>
+            </section>
+          </div>
+        </a>
+      </li>
+    </ul>
+    <ul v-else>
+      <li v-for="i in 10" :key="i">
+        <img src="./shop_back.svg">
+      </li>
+    </ul>
+  </div>
+</template>
+
+<script>
+  import {mapState} from 'vuex'
+    export default {
+      data(){
+        return{
+          imgBaseUrl: 'http://cangdu.org:8001/img/'
+        }
+      },
+      computed:{
+        ...mapState(['shops'])
+      }
+    }
+</script>
 ```

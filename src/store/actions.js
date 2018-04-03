@@ -29,7 +29,7 @@ export default{
       commit(RECEIVE_CATEGORYS,{categorys})
     }
   },
-  async getShops({commit,}){
+  async getShops({commit,state}){
     const {latitude,longitude} = state;
     const result = await reqShopList(latitude,longitude);
     if(result.code===0){

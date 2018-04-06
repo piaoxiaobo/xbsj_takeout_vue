@@ -13,8 +13,9 @@
           <div :class="{on: loginWay}">
             <section class="login_message">
               <input type="tel" maxlength="11" placeholder="手机号" v-model="phone">
+
               <button :disabled="computeTime>0 || !rightPhone" class="get_verification"
-                      :class="{right_phone_number: rightPhone}" @click="sendCode">
+                      :class="{right_phone_number: rightPhone}" @click.prevent="sendCode">
                 {{computeTime ? `已发送(${computeTime}s)` : '获取验证码'}}
               </button>
             </section>
@@ -48,7 +49,7 @@
               </section>
             </section>
           </div>
-          <button class="login_submit">登录</button>
+          <button class="login_submit" @click.prevent="login">登录</button>
         </form>
         <a href="javascript:;" class="about_us">关于我们</a>
       </div>
@@ -56,31 +57,35 @@
         <i class="iconfont icon-jiantou2"></i>
       </a>
     </div>
+    <AlertTip v-if="isShowAlert" :alertText="alertText" @closeTip="closeTip"/>
   </div>
 </template>
 
 <script>
+  import AlertTip from '../../components/AlertTip/AlertTip.vue'
+  import {loginPwd, loginSms, sendCode} from '../../api/index.js'
   export default {
     data () {
       return {
-        loginWay: false, // true代表短信登录, false代表密码登录
+        loginWay: true, // true代表短信登录, false代表密码登录
         phone: '', // 手机号
         code: '', // 短信验证码
         name: '', // 用户名
         pwd: '', // 密码
         captcha: '', // 图片验证码
         computeTime: 0, // 倒计时的时间
-        showPwd: false // 是否显示密码, 默认不显示
+        showPwd: false, // 是否显示密码, 默认不显示
+        isShowAlert: false, // 是否显示警告框
+        alertText: '', // 警告框的文本
       }
     },
     computed: {
-      // 判断是否是合法的手机号
       rightPhone () { // 以1开头, 11位数字
         return /^1\d{10}$/.test(this.phone)
       }
     },
     methods: {
-      sendCode () {
+      async sendCode () {
         this.computeTime = 30;
         const intervalId = setInterval(() => {
           this.computeTime--;
@@ -88,17 +93,73 @@
             clearInterval(intervalId)
           }
         }, 1000)
+        const result = await sendCode(this.phone);
+        if(result.code===1) {
+          this.showAlert(result.msg);
+          clearInterval(intervalId);
+          this.computeTime = 0
+        }
       },
       updateCaptcha (event) {
         event.target.src='http://localhost:3000/captcha?time='+Date.now()
+      },
+      showAlert(text) {
+        this.isShowAlert = true
+        this.alertText = text
+      },
+      async login () {
+        let result;
+
+        if(this.loginWay) {
+          const {rightPhone, phone, code} = this;
+          if(!rightPhone) {
+            this.showAlert('手机号不正确');
+            return
+          } else if (!/^\d{6}$/.test(code)) {
+            this.showAlert('验证码不正确');
+            return
+          }
+
+          result = await loginSms({phone, code})
+        } else {
+          const {name, pwd, captcha} = this;
+          if(!name) {
+            this.showAlert('必须指定用户名');
+            return
+          } else if(!pwd) {
+            this.showAlert('必须指定密码');
+            return
+          } else if(!captcha) {
+            this.showAlert('必须指定验证码');
+            return
+          }
+
+          result = await loginPwd({name, pwd, captcha})
+        }
+        if(result.code===1) {
+          this.showAlert(result.msg)
+        } else {
+          const user = result.data;
+          this.$store.dispatch('saveUserInfo', user);
+          this.$router.replace('/profile')
+        }
+      },
+      closeTip () {
+        this.isShowAlert = false;
+        this.alertText = ''
       }
+    },
+    components: {
+      AlertTip
     }
   }
 </script>
 
+
 <style lang="stylus" rel="stylesheet/stylus">
   @import "../../common/stylus/mixins.styl"
   .loginContainer
+    position absolute
     width 100%
     height 100%
     background #fff

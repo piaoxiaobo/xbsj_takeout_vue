@@ -1,16 +1,17 @@
 <template>
   <div class="shop_container">
-    <ul class="shop_list" v-if="shops.length>0">
-      <li class="shop_li border-1px" v-for="(shop,index) in shops" :key="index">
+    <ul class="shop_list" v-if="shops.length">
+      <li class="shop_li border-1px" v-for="(shop, index) in shops" :key="index"
+          @click="$router.push('/shop')">
         <a>
           <div class="shop_left">
-            <img class="shop_img" :src="imgBaseUrl+shop.image_path">
+            <img class="shop_img" :src="imgBaseUrl + shop.image_path">
           </div>
           <div class="shop_right">
             <section class="shop_detail_header">
-              <h4 class="shop_title ellipsis" >{{shop.name}}</h4>
+              <h4 class="shop_title ellipsis">{{shop.name}}</h4>
               <ul class="shop_detail_ul">
-                <li class="supports" v-for="(support,index) in shop.supports">{{support.icon_name}}</li>
+                <li class="supports" v-for="(support, index) in shop.supports" :key="index">{{support.icon_name}}</li>
               </ul>
             </section>
             <section class="shop_rating_order">
@@ -24,8 +25,7 @@
                 </div>
               </section>
               <section class="shop_rating_order_right">
-                <!--{{shop.delivery_mode.text}}-->
-                <span class="delivery_style delivery_right">小泊专送</span>
+                <span class="delivery_style delivery_right">{{shop.delivery_mode.text}}</span>
               </section>
             </section>
             <section class="shop_distance">
@@ -41,7 +41,7 @@
     </ul>
     <ul v-else>
       <li v-for="i in 10" :key="i">
-        <img src="./shop_back.svg">
+        <img src="shop_back.svg">
       </li>
     </ul>
   </div>
@@ -50,21 +50,21 @@
 <script>
   import {mapState} from 'vuex'
   import Star from '../Start/Star.vue'
-
-    export default {
-      data(){
-        return{
-          imgBaseUrl: 'http://cangdu.org:8001/img/'
-        }
-      },
-      computed:{
-        ...mapState(['shops']),
-      },
-      components:{
-        Star
+  export default {
+    data () {
+      return {
+        imgBaseUrl: 'http://cangdu.org:8001/img/'
       }
+    },
+    computed: {
+      ...mapState(['shops'])
+    },
+    components: {
+      Star
     }
+  }
 </script>
+
 
 <style lang="stylus" rel="stylesheet/stylus">
   @import "../../common/stylus/mixins.styl"

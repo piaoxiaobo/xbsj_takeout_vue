@@ -22,10 +22,10 @@ exports.randomCode = randomCode;
 向指定号码发送指定验证码
  */
 function sendCode(phone, code, callback) {
-    var ACCOUNT_SID = '8aaf070855b647ab0155b9f80994058a';
-    var AUTH_TOKEN = 'aa8aa679414e49df8908ea5b3d043c24';
+    var ACCOUNT_SID = '8a216da86276486901628e54bfc50ace';
+    var AUTH_TOKEN = 'fa5c3902f84f4f2e833daeb87b50faa5';
     var Rest_URL = 'https://app.cloopen.com:8883';
-    var AppID = '8aaf070855b647ab0155b9f809f90590';
+    var AppID = '8a216da86276486901628e54c01e0ad5';
     //1. 准备请求url
     /*
      1.使用MD5加密（账户Id + 账户授权令牌 + 时间戳）。其中账户Id和账户授权令牌根据url的验证级别对应主账户。
@@ -62,8 +62,8 @@ function sendCode(phone, code, callback) {
     }
 
     //4. 发送请求, 并得到返回的结果, 调用callback
-	callback(true);
-    /*request({
+    // callback(true);
+    request({
         method : 'POST',
         url : url,
         headers : headers,
@@ -71,9 +71,9 @@ function sendCode(phone, code, callback) {
         json : true
     }, function (error, response, body) {
         console.log(error, response, body);
-        //callback(body.statusCode==='000000');
-        callback(true);
-    });*/
+        callback(body.statusCode==='000000');
+        // callback(true);
+    });
 }
 exports.sendCode = sendCode;
 

@@ -2,7 +2,7 @@
  * Created by Bianrongcheng on 2018
  */
 
-
+import Vue from 'vue'
 import {
   RECEIVE_SHOPS,
   RECEIVE_ADDRESS,
@@ -10,7 +10,9 @@ import {
   RECEIVE_USER_INFO,
   RECEIVE_SHOP_GOODS,
   RECEIVE_SHOP_INFO,
-  RECEIVE_SHOP_RATINGS
+  RECEIVE_SHOP_RATINGS,
+  INCREMENT_FOOD_COUNT,
+  DECREMENT_FOOD_COUNT,
 } from './mutation-types'
 
 export default {
@@ -34,5 +36,17 @@ export default {
   },
   [RECEIVE_SHOP_INFO] (state, {shopInfo}) {
     state.shopInfo = shopInfo
+  },
+  [INCREMENT_FOOD_COUNT] (state, {food}) {
+    if(food.count){
+      food.count++
+    }else{
+        Vue.set(food, 'count', 1)
+      }
+  },
+  [DECREMENT_FOOD_COUNT] (state, {food}) {
+    if(food.count){
+      food.count--
+    }
   },
 }

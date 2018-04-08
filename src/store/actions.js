@@ -9,7 +9,9 @@ import {
   RECEIVE_USER_INFO,
   RECEIVE_SHOP_GOODS,
   RECEIVE_SHOP_INFO,
-  RECEIVE_SHOP_RATINGS
+  RECEIVE_SHOP_RATINGS,
+  INCREMENT_FOOD_COUNT,
+  DECREMENT_FOOD_COUNT,
 } from './mutation-types'
 import {
   reqAddress,
@@ -104,5 +106,11 @@ export default {
     }
   },
 
-
+  updateFoodCount({commit},{food,isAdd}){
+    if(isAdd){
+      commit(INCREMENT_FOOD_COUNT, {food})
+    }else{
+      commit(DECREMENT_FOOD_COUNT, {food})
+    }
+  }
 }

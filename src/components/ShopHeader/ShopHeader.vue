@@ -3,7 +3,7 @@
     <div class="content-wrapper">
       <div class="avatar">
         <img :src="shopInfo.avatar">
-        <div class="back"><i class="iconfont icon-arrow_left"></i></div>
+        <div class="back" @click="$router.back()"><i class="iconfont icon-arrow_left"></i></div>
       </div>
       <div class="content">
         <div class="title">

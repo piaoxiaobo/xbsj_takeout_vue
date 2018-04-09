@@ -40,7 +40,6 @@
               </li>
             </ul>
           </li>
-
         </ul>
       </div>
       <ShopCart/>
@@ -67,9 +66,7 @@
     mounted () {
       this.$store.dispatch('getShopGoods', () => {// 状态已更新
         this.$nextTick(() => { // 更新也更新了
-          // 初始化滚动
-          this._initScroll()
-          // 初始化tops
+          this._initScroll();
           this._initTops()
         })
       })
@@ -77,43 +74,43 @@
     computed: {
       ...mapState(['shopGoods']),
       currentIndex () {
-        const {tops, scrollY} = this
+        const {tops, scrollY} = this;
         return tops.findIndex((top, index) => scrollY>=top && scrollY< tops[index+1])
       }
     },
     methods: {
       _initTops () {
-        const tops = []
-        let top = 0
-        tops.push(top)
+        const tops = [];
+        let top = 0;
+        tops.push(top);
         const lis = this.$refs.foodsUl.getElementsByClassName('food-list-hook')
         Array.prototype.slice.call(lis).forEach(li => {
-          top += li.clientHeight
+          top += li.clientHeight;
           tops.push(top)
-        })
+        });
         this.tops = tops
       },
       _initScroll () {
         new BScroll('.menu-wrapper', {
           click: true //是否分发点击事件
-        })
+        });
         this.rightScroll = new BScroll('.foods-wrapper', {
           probeType: 2,
           click: true //是否分发点击事件
-        })
+        });
         this.rightScroll.on('scroll', (pos) => {
           this.scrollY = Math.abs(pos.y)
-        })
+        });
         this.rightScroll.on('scrollEnd', (pos) => {
           this.scrollY = Math.abs(pos.y)
         })
       },
       selectGood (index) {
-        const y = -this.tops[index]
+        const y = -this.tops[index];
         this.rightScroll.scrollTo(0, y, 300)
       },
       selectFood (food) {
-        this.food = food
+        this.food = food;
         this.$refs.food.toggleShow()
       }
     },

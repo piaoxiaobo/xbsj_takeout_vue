@@ -1,12 +1,13 @@
 <template>
-  <div class="food" v-show="isShow" >
+  <div class="food" v-show="isShow">
     <div class="food-content">
       <div class="image-header">
-        <img src="http://fuss10.elemecdn.com/8/a6/453f65f16b1391942af11511b7a90jpeg.jpeg?imageView2/1/w/750/h/750">
+        <img :src="food.image">
         <div class="back" @click="toggleShow">
-          <i class="iconfont icon-arrow_left" ></i>
+          <i class="iconfont icon-arrow_left"></i>
         </div>
       </div>
+
       <div class="content">
         <h1 class="title">{{food.name}}</h1>
         <div class="detail">
@@ -14,36 +15,44 @@
           <span class="rating">好评率{{food.rating}}%</span>
         </div>
         <div class="price">
-          <span class="now">￥12</span>
-          <span class="old">￥14</span>
+          <span class="now">￥{{food.price}}</span>
+          <span class="old" v-if="food.oldPrice">￥{{food.oldPrice}}</span>
         </div>
         <div class="cartcontrol-wrapper" v-if="food.count">
           <CartControl :food="food"/>
         </div>
-        <div class="buy" @click="addToCart" v-else>加入购物车
-        </div>
+        <div class="buy" v-else @click="addToCart">加入购物车</div>
       </div>
 
-      <div class="split"></div>
+      <Split/>
 
       <div class="info">
         <h1 class="title">商品信息</h1>
         <p class="text">{{food.info}}</p>
       </div>
-      <div class="split"></div>
+
+      <Split/>
+
       <div class="rating">
         <h1 class="title">商品评价</h1>
-        <div>RatingSelect组件</div>
+        <RatingSelect
+          :desc="{all: '全部', positive: '满意', negative: '不满意'}"
+          :ratings="food.ratings"
+          :selectType="selectType"
+          :onlyContent="onlyContent"
+          @setSelectType="setSelectType"
+          @toggleOnlyContent="toggleOnlyContent"/>
         <div class="rating-wrapper">
           <ul>
-            <li class="rating-item border-1px">
+            <li class="rating-item border-1px" v-for="(rating, index) in filterRatings" :key="index">
               <div class="user">
-                <span class="name">xxx</span>
-                <img class="avatar" width="12" height="12" src="http://static.galileo.xiaojukeji.com/static/tms/default_header.png">
+                <span class="name">{{rating.username}}</span>
+                <img class="avatar" width="12" height="12" :src="rating.avatar">
               </div>
-              <div class="time">21:52:44</div>
+              <div class="time">{{rating.rateTime|dateString}}</div>
               <p class="text">
-                <span class="iconfont icon-thumb_up"></span>不错
+                <span class="iconfont"
+                      :class="rating.rateType===0 ? 'icon-thumb_up' : 'icon-thumb_down'"></span>{{rating.text}}
               </p>
             </li>
           </ul>
@@ -54,46 +63,51 @@
 </template>
 
 <script>
-  import Bscroll from 'better-scroll'
-  import CartControl from '../../components/CartControl/CartControl'
+  import BScroll from 'better-scroll'
+  import CartControl from '../CartControl/CartControl.vue'
+  import RatingSelect from '../RatingSelect/RatingSelect.vue'
+  import {ratingsMixin} from '../../common/mixins'
 
-    export default {
-      props:{
-        food:Object
-      },
-      data(){
-        return{
-          isShow:false
-        }
-      },
-      methods:{
+  export default {
+    mixins: [ratingsMixin],
+    props: {
+      food: Object
+    },
 
-        setSelectType (selectType) {
-          this.selectType = selectType
-        },
-        toggleOnlyContent () {
-          this.onlyContent = !this.onlyContent
-        },
-
-
-        toggleShow(){
-          this.isShow=!this.isShow;
-          if(this.isShow){
-            this.$nextTick(() =>{
-              new Bscroll('.food',{
-                click:true
-              })
-            })
-          }
-        },
-        addToCart(){
-          this.$store.dispatch('updateFoodCount',{food:this.food,isAdd:true})
-        }
-      },
-      components:{
-        CartControl
+    data () {
+      return {
+        isShow: false, // 是否显示
       }
+    },
+
+
+
+    methods: {
+
+      toggleShow () {
+        this.isShow = !this.isShow
+
+        if(this.isShow) {
+          this.$nextTick(() => {
+            if(!this.scroll) {
+              this.scroll = new BScroll('.food', {
+                click: true
+              })
+            }
+          })
+        }
+      },
+
+      addToCart () {
+        this.$store.dispatch('updateFoodCount', {food: this.food, isAdd: true})
+      }
+    },
+
+    components: {
+      CartControl,
+      RatingSelect
     }
+  }
 </script>
 
 <style lang="stylus" rel="stylesheet/stylus" scoped>

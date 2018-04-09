@@ -1,7 +1,6 @@
-/**
- * Created by Bianrongcheng on 2018
+/*
+vuex最核心的管理对象store
  */
-
 import {
   RECEIVE_SHOPS,
   RECEIVE_ADDRESS,
@@ -12,7 +11,7 @@ import {
   RECEIVE_SHOP_RATINGS,
   INCREMENT_FOOD_COUNT,
   DECREMENT_FOOD_COUNT,
-  CLEAR_CART,
+  CLEAR_CART
 } from './mutation-types'
 import {
   reqAddress,
@@ -80,21 +79,24 @@ export default {
   },
 
   // 异步获取商家商品列表
-  async getShopGoods({commit},cb) {
+  async getShopGoods({commit}, cb) {
     const result = await reqShopGoods()
     if (result.code === 0) {
       const shopGoods = result.data
       commit(RECEIVE_SHOP_GOODS, {shopGoods})
+      // 通知组件更新了状态
       cb && cb()
     }
   },
 
   // 异步获取商家评论列表
-  async getShopRatings({commit}) {
+  async getShopRatings({commit}, cb) {
     const result = await reqShopRatings()
     if (result.code === 0) {
       const shopRatings = result.data
       commit(RECEIVE_SHOP_RATINGS, {shopRatings})
+      // 通知组件更新了状态
+      cb && cb()
     }
   },
 
@@ -107,14 +109,17 @@ export default {
     }
   },
 
-  updateFoodCount({commit},{food,isAdd}){
-    if(isAdd){
+  updateFoodCount ({commit}, {food, isAdd}) {
+    if(isAdd) {
       commit(INCREMENT_FOOD_COUNT, {food})
-    }else{
+    } else {
       commit(DECREMENT_FOOD_COUNT, {food})
     }
   },
-  clearCart({commit}){
+
+  //清空购物车
+  clearCart ({commit}) {
     commit(CLEAR_CART)
   }
+
 }

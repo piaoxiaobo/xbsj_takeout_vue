@@ -49,7 +49,7 @@
 
 <script>
   import {mapState} from 'vuex'
-  import Star from '../Start/Star.vue'
+  import Star from '../Star/Star.vue'
   export default {
     data () {
       return {

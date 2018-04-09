@@ -26,15 +26,18 @@
       selectType: Number, // 0: 满意, 1: 不满意, 2: 全部
       onlyContent: Boolean, // true: 只显示有文本的, false, 对文本没有要求
     },
+
     computed: {
       positiveCount () {
         return this.ratings.reduce((preTotal, rating) => preTotal + (rating.rateType===0?1:0), 0)
       }
     },
+
     methods: {
       setSelectType (selectType) {
         this.$emit('setSelectType', selectType)
       },
+
       toggleOnlyContent () {
         this.$emit('toggleOnlyContent')
       }
@@ -44,6 +47,7 @@
 
 <style lang="stylus" rel="stylesheet/stylus" scoped>
   @import "../../common/stylus/mixins.styl"
+
   .ratingselect
     .rating-type
       padding: 18px 0
@@ -84,3 +88,4 @@
         vertical-align: top
         font-size: 12px
 </style>
+

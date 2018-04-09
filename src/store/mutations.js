@@ -13,6 +13,7 @@ import {
   RECEIVE_SHOP_RATINGS,
   INCREMENT_FOOD_COUNT,
   DECREMENT_FOOD_COUNT,
+  CLEAR_CART,
 } from './mutation-types'
 
 export default {
@@ -41,12 +42,21 @@ export default {
     if(food.count){
       food.count++
     }else{
-        Vue.set(food, 'count', 1)
+        Vue.set(food, 'count', 1);
+        state.shopCart.push(food)
       }
   },
   [DECREMENT_FOOD_COUNT] (state, {food}) {
     if(food.count){
-      food.count--
+      food.count--;
+      if(food.count===0){
+        state.shopCart.splice(state.shopCart.indexOf(food), 1)
+      }
     }
   },
+  [CLEAR_CART](state){
+    state.shopCart.forEach(food => food.count = 0)
+    state.shopCart=[]
+  }
+
 }

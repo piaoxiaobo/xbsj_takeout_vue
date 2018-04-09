@@ -13,4 +13,5 @@ export default {
   shopGoods: [], // 商家的食品数组
   shopRatings: [], // 商家的评论数组
   shopInfo: {}, //商家信息
+  shopCart: [] //购物车信息
 }
